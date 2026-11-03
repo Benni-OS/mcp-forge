@@ -17,12 +17,15 @@ def __getattr__(name: str) -> object:
     """
     if name == "memory":
         from mcp_forge.contrib.memory import memory
+
         return memory
     if name == "filesystem":
         from mcp_forge.contrib.filesystem import filesystem
+
         return filesystem
     if name == "web":
         from mcp_forge.contrib.web import web
+
         return web
     raise AttributeError(f"module 'mcp_forge.contrib' has no attribute '{name}'")
 

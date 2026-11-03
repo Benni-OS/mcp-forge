@@ -21,21 +21,23 @@ class HttpTransport:
       POST /tools/{name}    — call a tool with JSON body
     """
 
-    def __init__(self, app: "Forge", host: str = "0.0.0.0", port: int = 8080) -> None:
+    def __init__(self, app: Forge, host: str = "0.0.0.0", port: int = 8080) -> None:
         self.app = app
         self.host = host
         self.port = port
 
     def start(self, reload: bool = False) -> None:
         try:
-            from fastapi import FastAPI, Body, HTTPException
-            from fastapi.middleware.cors import CORSMiddleware
             import uvicorn
+            from fastapi import Body, FastAPI, HTTPException
+            from fastapi.middleware.cors import CORSMiddleware
         except ImportError as e:
             raise ImportError(
                 "HTTP transport requires 'fastapi' and 'uvicorn'. "
                 "Install with: pip install mcp-forge[http]"
             ) from e
+
+        default_body = Body(default_factory=dict)
 
         api = FastAPI(
             title=self.app.name,
@@ -62,7 +64,7 @@ class HttpTransport:
         @api.post("/tools/{tool_name}")
         async def call_tool(
             tool_name: str,
-            body: dict[str, Any] = Body(default_factory=dict),
+            body: dict[str, Any] = default_body,
         ) -> dict[str, Any]:
             try:
                 result = await forge.call_tool(tool_name, body)

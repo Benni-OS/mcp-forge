@@ -44,10 +44,12 @@ from mcp_forge import Forge
 
 app = Forge(name="my-server", version="1.0.0")
 
+
 @app.tool(description="Search the knowledge base")
 async def search(query: str, limit: int = 10) -> list[dict]:
     """Returns ranked results for the given query."""
     ...  # your logic here
+
 
 if __name__ == "__main__":
     app.run()  # STDIO — Claude Desktop / Cursor / VS Code ready
@@ -136,10 +138,12 @@ from mcp_forge import Forge
 
 app = Forge(name="calculator")
 
+
 @app.tool()
 def add(a: float, b: float) -> float:
     """Add two numbers."""
     return a + b
+
 
 app.run()
 ```
@@ -151,9 +155,9 @@ from mcp_forge import Forge
 from mcp_forge.contrib import memory, filesystem, web
 
 app = Forge(name="agent-tools")
-app.include(memory)      # remember(), recall(), forget(), list_memory()
+app.include(memory)  # remember(), recall(), forget(), list_memory()
 app.include(filesystem)  # read_file(), write_file(), list_dir(), delete_file()
-app.include(web)         # fetch_url()
+app.include(web)  # fetch_url()
 
 app.run()
 ```
@@ -164,6 +168,7 @@ app.run()
 from mcp_forge.testing import ForgeTestClient
 
 client = ForgeTestClient(app)
+
 
 def test_add():
     result = client.call("add", {"a": 2, "b": 3})

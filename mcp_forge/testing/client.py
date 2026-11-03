@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from mcp_forge.core.forge import Forge
@@ -24,7 +24,7 @@ class ForgeTestClient:
         assert result == 5
     """
 
-    def __init__(self, app: "Forge") -> None:
+    def __init__(self, app: Forge) -> None:
         self.app = app
 
     def call(self, tool_name: str, params: dict[str, Any] | None = None) -> Any:
@@ -35,7 +35,8 @@ class ForgeTestClient:
             # Running inside an existing event loop (pytest-asyncio, Jupyter)
             # Use nest_asyncio if available, otherwise raise a clear error
             try:
-                import nest_asyncio
+                import nest_asyncio  # type: ignore[import-not-found,import-untyped]
+
                 nest_asyncio.apply(loop)
                 return loop.run_until_complete(coro)
             except ImportError:

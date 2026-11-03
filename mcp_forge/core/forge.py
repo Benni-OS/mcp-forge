@@ -6,12 +6,13 @@ import asyncio
 import copy
 import logging
 import sys
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from mcp_forge.core.config import ForgeConfig
+from mcp_forge.core.exceptions import ToolNotFoundError
 from mcp_forge.core.schema import build_schema
 from mcp_forge.core.validator import validate_input, validate_output
-from mcp_forge.core.exceptions import ToolNotFoundError
 
 logger = logging.getLogger("mcp_forge")
 
@@ -61,7 +62,7 @@ class Forge:
         name: str | None = None,
         description: str = "",
         tags: list[str] | None = None,
-    ) -> Callable:
+    ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         """
         Decorator to register a function as an MCP tool.
 
@@ -74,7 +75,7 @@ class Forge:
             The original function, unmodified.
         """
 
-        def decorator(fn: Callable) -> Callable:
+        def decorator(fn: Callable[..., Any]) -> Callable[..., Any]:
             tool_name = name or fn.__name__
             schema = build_schema(fn)
             self._tools[tool_name] = {
@@ -97,6 +98,12 @@ class Forge:
         Tools are shallow-copied so each Forge instance gets its own
         independent tool registry — no shared mutable state between apps.
         """
+        if not hasattr(router, "_tools") and hasattr(router, "__name__"):
+            attr_name = router.__name__.split(".")[-1]
+            candidate = getattr(router, attr_name, None)
+            if hasattr(candidate, "_tools"):
+                router = candidate
+
         for tool_name, tool_def in router._tools.items():
             # copy.copy preserves function reference but isolates the metadata dict
             entry = copy.copy(tool_def)
@@ -145,17 +152,26 @@ class Forge:
         transport = transport or self.config.transport
         logger.info(
             "Starting mcp-forge '%s' v%s [transport=%s]",
-            self.name, self.version, transport,
+            self.name,
+            self.version,
+            transport,
         )
 
         if transport == "stdio":
             from mcp_forge.transports.stdio import StdioTransport
+
             StdioTransport(self).start()
         elif transport == "http":
             from mcp_forge.transports.http import HttpTransport
-            HttpTransport(self, host=host or self.config.host, port=port or self.config.port).start(reload=reload)
+
+            HttpTransport(self, host=host or self.config.host, port=port or self.config.port).start(
+                reload=reload
+            )
         elif transport == "sse":
             from mcp_forge.transports.sse import SseTransport
-            SseTransport(self, host=host or self.config.host, port=port or self.config.port).start(reload=reload)
+
+            SseTransport(self, host=host or self.config.host, port=port or self.config.port).start(
+                reload=reload
+            )
         else:
             raise ValueError(f"Unknown transport: '{transport}'. Choose: stdio, http, sse")

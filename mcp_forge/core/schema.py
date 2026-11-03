@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import inspect
+import types
 import typing
-from typing import Any, get_type_hints
-
+from typing import Any, get_args, get_origin, get_type_hints
 
 _PYTHON_TO_JSON_TYPE: dict[Any, str] = {
     int: "integer",
@@ -60,21 +60,23 @@ def build_schema(fn: Any) -> dict[str, Any]:
 
 def _resolve_type(annotation: Any) -> dict[str, Any]:
     """Recursively resolve a Python type annotation to a JSON Schema fragment."""
-    origin = getattr(annotation, "__origin__", None)
+    origin = get_origin(annotation)
 
     # list[T]
     if origin is list:
-        args = getattr(annotation, "__args__", (Any,))
-        return {"type": "array", "items": _resolve_type(args[0])}
+        args = get_args(annotation)
+        item_type = args[0] if args else Any
+        return {"type": "array", "items": _resolve_type(item_type)}
 
     # dict[str, T]
     if origin is dict:
-        args = getattr(annotation, "__args__", (Any, Any))
-        return {"type": "object", "additionalProperties": _resolve_type(args[1])}
+        args = get_args(annotation)
+        value_type = args[1] if len(args) > 1 else Any
+        return {"type": "object", "additionalProperties": _resolve_type(value_type)}
 
     # Optional[T] / Union[T, None]
-    if origin is typing.Union:
-        args = getattr(annotation, "__args__", ())
+    if origin in (typing.Union, types.UnionType):
+        args = get_args(annotation)
         non_none = [a for a in args if a is not type(None)]
         if len(non_none) == 1:
             resolved = _resolve_type(non_none[0])
@@ -86,6 +88,7 @@ def _resolve_type(annotation: Any) -> dict[str, Any]:
     # Pydantic BaseModel — lazy import so pydantic is optional
     try:
         from pydantic import BaseModel
+
         if isinstance(annotation, type) and issubclass(annotation, BaseModel):
             return annotation.model_json_schema()
     except ImportError:

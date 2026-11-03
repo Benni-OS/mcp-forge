@@ -29,7 +29,7 @@ def memory_router() -> Forge:
         return f"Forgot: {key}" if removed is not None else f"Key '{key}' not found"
 
     @router.tool(description="List all keys currently in memory")
-    def list_memory() -> list:  # type: ignore[return]
+    def list_memory() -> list[str]:
         return list(_store.keys())
 
     return router

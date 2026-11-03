@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import pytest
+
 from mcp_forge import Forge
-from mcp_forge.testing import ForgeTestClient
 from mcp_forge.core.exceptions import ValidationError
+from mcp_forge.testing import ForgeTestClient
 
 
 def test_validate_output_null_guard() -> None:

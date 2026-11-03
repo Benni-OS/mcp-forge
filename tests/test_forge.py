@@ -1,9 +1,10 @@
 """Core tests for mcp-forge."""
 
 import pytest
+
 from mcp_forge import Forge
-from mcp_forge.testing import ForgeTestClient
 from mcp_forge.core.exceptions import ToolNotFoundError, ValidationError
+from mcp_forge.testing import ForgeTestClient
 
 
 @pytest.fixture

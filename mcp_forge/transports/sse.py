@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
-from typing import TYPE_CHECKING, Any, AsyncGenerator
+from collections.abc import AsyncGenerator
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from mcp_forge.core.forge import Forge
@@ -19,21 +19,23 @@ class SseTransport:
     Compatible with LLM clients that support SSE-based MCP.
     """
 
-    def __init__(self, app: "Forge", host: str = "0.0.0.0", port: int = 8080) -> None:
+    def __init__(self, app: Forge, host: str = "0.0.0.0", port: int = 8080) -> None:
         self.app = app
         self.host = host
         self.port = port
 
     def start(self, reload: bool = False) -> None:
         try:
-            from fastapi import FastAPI, Body
-            from fastapi.responses import StreamingResponse
             import uvicorn
+            from fastapi import Body, FastAPI
+            from fastapi.responses import StreamingResponse
         except ImportError as e:
             raise ImportError(
                 "SSE transport requires 'fastapi' and 'uvicorn'. "
                 "Install with: pip install mcp-forge[sse]"
             ) from e
+
+        default_body = Body(default_factory=dict)
 
         api = FastAPI(title=f"{self.app.name} (SSE)", version=self.app.version)
         forge = self.app
@@ -45,7 +47,7 @@ class SseTransport:
         @api.post("/tools/{tool_name}/stream")
         async def stream_tool(
             tool_name: str,
-            body: dict[str, Any] = Body(default_factory=dict),
+            body: dict[str, Any] = default_body,
         ) -> StreamingResponse:
             async def event_generator() -> AsyncGenerator[str, None]:
                 try:

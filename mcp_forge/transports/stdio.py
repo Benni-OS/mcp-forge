@@ -32,7 +32,7 @@ class StdioTransport:
     Fully compatible with Claude Desktop, Cursor, and VS Code MCP clients.
     """
 
-    def __init__(self, app: "Forge") -> None:
+    def __init__(self, app: Forge) -> None:
         self.app = app
 
     def start(self) -> None:
@@ -75,11 +75,14 @@ class StdioTransport:
             return None
 
         if method == "initialize":
-            return self._ok(msg_id, {
-                "protocolVersion": "2024-11-05",
-                "capabilities": {"tools": {}},
-                "serverInfo": {"name": self.app.name, "version": self.app.version},
-            })
+            return self._ok(
+                msg_id,
+                {
+                    "protocolVersion": "2024-11-05",
+                    "capabilities": {"tools": {}},
+                    "serverInfo": {"name": self.app.name, "version": self.app.version},
+                },
+            )
 
         if method == "tools/list":
             return self._ok(msg_id, {"tools": self.app.list_tools()})
@@ -90,10 +93,15 @@ class StdioTransport:
             tool_input = params.get("arguments", {})
             try:
                 result = await self.app.call_tool(tool_name, tool_input)
-                return self._ok(msg_id, {
-                    "content": [{"type": "text", "text": json.dumps(result, ensure_ascii=False)}],
-                    "isError": False,
-                })
+                return self._ok(
+                    msg_id,
+                    {
+                        "content": [
+                            {"type": "text", "text": json.dumps(result, ensure_ascii=False)}
+                        ],
+                        "isError": False,
+                    },
+                )
             except Exception as e:
                 logger.error("Tool '%s' raised: %s", tool_name, e)
                 return self._err(msg_id, str(e))

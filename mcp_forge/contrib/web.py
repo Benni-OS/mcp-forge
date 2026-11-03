@@ -11,8 +11,8 @@ web = Forge(name="__web_router__")
 async def fetch_url(url: str, timeout: int = 10) -> str:
     try:
         import httpx
-    except ImportError:
-        raise ImportError("fetch_url requires httpx. Install with: pip install httpx")
+    except ImportError as err:
+        raise ImportError("fetch_url requires httpx. Install with: pip install httpx") from err
 
     async with httpx.AsyncClient(timeout=timeout) as client:
         response = await client.get(url)
