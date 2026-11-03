@@ -14,6 +14,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-FF007A?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![mypy strict](https://img.shields.io/badge/mypy-strict-7000FF?style=for-the-badge&logo=python&logoColor=white)](https://mypy.readthedocs.io)
 [![Part of Benni OS](https://img.shields.io/badge/Part%20of-Benni%20OS-0D0D0D?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/benni-os)
+[![Smithery](https://img.shields.io/badge/Smithery-Indexed-00F0FF?style=for-the-badge&logo=target&logoColor=black)](https://smithery.ai)
+[![Author](https://img.shields.io/badge/Author-Benni%20Alencar-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/benni-alencar/)
 
 <br/>
 
@@ -289,11 +291,11 @@ The open-source stack serves as the decentralized foundation for the enterprise-
 ---
 
 👉 **Explore & Connect with the Benni OS Ecosystem:**
-* **Official Website**: [https://bennios.dev](https://bennios.dev)
-* **Benni Operator Hub**: [https://hub.bennios.dev](https://hub.bennios.dev)
-* **GitHub Organization**: [https://github.com/benni-os](https://github.com/benni-os)
+* **Official Website**: [https://benni-os.net](https://benni-os.net)
 * **Maintainer Profile**: [https://github.com/BenniAlencar](https://github.com/BenniAlencar)
-* **Documentation & Blueprints**: [https://docs.bennios.dev](https://docs.bennios.dev)
+* **LinkedIn**: [https://www.linkedin.com/in/benni-alencar/](https://www.linkedin.com/in/benni-alencar/)
+* **GitHub Organization**: [https://github.com/benni-os](https://github.com/benni-os)
+* **Documentation & Architecture**: [https://benni-os.net](https://benni-os.net)
 
 <br/>
 
