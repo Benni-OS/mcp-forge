@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from importlib import import_module
 from typing import Any
 
-from jsonschema import Draft7Validator, SchemaError  # type: ignore[import-untyped]
+from jsonschema import Draft7Validator, SchemaError
 
 from mcp_forge.core.forge import Forge
 

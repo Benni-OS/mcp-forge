@@ -35,7 +35,7 @@ class ForgeTestClient:
             # Running inside an existing event loop (pytest-asyncio, Jupyter)
             # Use nest_asyncio if available, otherwise raise a clear error
             try:
-                import nest_asyncio  # type: ignore[import-not-found,import-untyped]
+                import nest_asyncio
 
                 nest_asyncio.apply(loop)
                 return loop.run_until_complete(coro)
