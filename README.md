@@ -308,3 +308,6 @@ The open-source stack serves as the decentralized foundation for the enterprise-
 Engineered by **Benni Alencar** and the Benni OS Core Engineering Group · *If mcp-forge saves you time, give it a ⭐*
 
 </div>
+
+
+* **[`agent-deep-research`](https://github.com/BenniAlencar/agent-deep-research)**: Autonomous multi-source deep research engine with cryptographic citation proofs & >85% token distillation.
