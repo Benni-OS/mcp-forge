@@ -1,0 +1,29 @@
+# Smithery configuration for mcp-forge
+# Schema: https://smithery.ai/docs/config
+
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      enableSecurityShield:
+        type: boolean
+        default: true
+        description: Enable Tier-0 Zero-Trust AST firewall and secret redactor
+      logLevel:
+        type: string
+        enum: ["DEBUG", "INFO", "WARNING", "ERROR"]
+        default: "INFO"
+        description: Logging verbosity level
+    required: []
+  commandFunction:
+    command: "python"
+    args: ["-m", "mcp_forge"]
+
+tags:
+  - framework
+  - security
+  - zero-trust
+  - prompt-injection-defense
+  - developer-tools
+  - python
